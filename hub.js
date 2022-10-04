@@ -3,13 +3,14 @@
 const eventPool = require ('./src/eventPool.js');
 const driverHandler = require('./src/handlers/driver.js');
 const vendorHandler = require('./src/handlers/vendor.js');
+const deliveredHandler = require('./src/handlers/delivered.js');
 const Chance = require('chance');
 
 const chance = new Chance();
 
 eventPool.on('PICKUP', driverHandler);
 eventPool.on('TRANSIT', vendorHandler);
-eventPool.on('DELIVERED', driverHandler);
+eventPool.on('DELIVERED', deliveredHandler);
 
 setInterval(() => {
   const order = {
@@ -21,6 +22,4 @@ setInterval(() => {
 
   console.log('--------------New Order Received-----------------------');
   eventPool.emit('PICKUP', { order });
-  eventPool.emit('TRANSIT', { order });
-  eventPool.emit('DELIVERED', { order });
-}, 3000)
+}, 9000)
