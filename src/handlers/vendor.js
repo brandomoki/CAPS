@@ -1,17 +1,33 @@
 'use strict';
 
 let eventPool = require('../eventPool.js');
+const Chance = require('chance');
 
-module.exports = (payload) => {
+const chance = new Chance();
+
+eventPool.on(' DELIVERY', confirmDelivery);
+
+function confirmDelivery(payload) {
+
   setTimeout(() => {
-    console.log(`----------------In-Transit------------------${payload.order.orderId}` );
-    console.log(` Store ${payload}` );
-
-    eventPool.emit('DELIVERED', payload)
-
+    console.log(`--------------------------------${payload.order.orderId}` );
+    eventPool.emit('DELIVERY', payload);
   }, 3000);
 
 }
+
+setInterval(() => {
+  const order = {
+    store: chance.company(),
+    orderId: chance.guid({version: 4}),
+    customer: chance.name(),
+    address: chance.address(),
+  };
+
+  console.log('|------------------New Order Received-----------------------|');
+  eventPool.emit('PICKUP', { order });
+}, 5000);
+
 
 
 
