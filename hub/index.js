@@ -12,7 +12,6 @@ const caps = io.of('/caps');
 io.on('connection', (socket) => {
   console.log('Socket connected to Global Event HUB!', socket.id);
 
-
 });
 
 caps.on('connection', (socket) => {
@@ -23,8 +22,20 @@ caps.on('connection', (socket) => {
   });
 
   socket.on('PICKUP', (payload) => {
-    console.log(Hub)
-  })
+    eventLogger('PICKUP', payload);
+    caps.emit('PICKUP', payload);
+
+  });
+
+  socket.on('TRANSIT', (payload) => {
+    eventLogger('TRANSIT', payload);
+    caps.emit('TRANSIT', payload);
+  });
+
+  socket.on('DELIVERY', (payload) => {
+    eventLogger('DELIVERY', payload);
+    caps.emit('DELIVERY', payload);
+  });
 
 });
 
