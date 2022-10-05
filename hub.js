@@ -1,25 +1,32 @@
 'use strict';
 
 const eventPool = require ('./src/eventPool.js');
-const driverHandler = require('./src/handlers/driver.js');
-const vendorHandler = require('./src/handlers/vendor.js');
-const deliveredHandler = require('./src/handlers/delivered.js');
-const Chance = require('chance');
+// const driverHandler = require('./src/handlers/driver.js');
+// const vendorHandler = require('./src/handlers/vendor.js');
+// const deliveredHandler = require('./src/handlers/delivered.js');
+// const Chance = require('chance');
 
-const chance = new Chance();
+// const chance = new Chance();
 
-eventPool.on('PICKUP', driverHandler);
-eventPool.on('TRANSIT', vendorHandler);
-eventPool.on('DELIVERED', deliveredHandler);
+eventPool.on('PICKUP', (payload) => eventLogger('PICKUP', payload));
+eventPool.on('TRANSIT', (payload) => eventLogger('TRANSIT', payload));
+eventPool.on('DELIVERED', (payload) => eventLogger('DELIVERED', payload));
 
-setInterval(() => {
-  const order = {
-    store: chance.company(),
-    orderId: chance.guid({version: 4}),
-    customer: chance.name(),
-    address: chance.address(),
-  };
+function eventLogger(event, payload){
+  const date = new Date();
+  const time = date.toTimeString();
+  console.log('EVENT', {event, time, payload});
+}
 
-  console.log('--------------New Order Received-----------------------');
-  eventPool.emit('PICKUP', { order });
-}, 9000)
+
+// setInterval(() => {
+//   const order = {
+//     store: chance.company(),
+//     orderId: chance.guid({version: 4}),
+//     customer: chance.name(),
+//     address: chance.address(),
+//   };
+
+//   console.log('|------------------New Order Received-----------------------|');
+//   eventPool.emit('PICKUP', { order });
+// }, 9000);
