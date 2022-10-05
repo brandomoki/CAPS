@@ -20,6 +20,6 @@ setInterval(() => {
     address: chance.address(),
   };
 
-  console.log('--------------New Order Received-----------------------');
+  console.log('|------------------New Order Received-----------------------|');
   eventPool.emit('PICKUP', { order });
-}, 9000)
+}, 9000);
